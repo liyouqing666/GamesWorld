@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="GamesWorld"
+  id="myeclipse.1475033224804"
+  context-root="/GamesWorld"
+  j2ee-spec="5.0"
+  archive="GamesWorld.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+
