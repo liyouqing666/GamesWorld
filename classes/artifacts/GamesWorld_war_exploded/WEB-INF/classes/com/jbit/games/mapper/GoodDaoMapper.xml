@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jbit.games.dao.GoodDao">
+
+	<!-- 结果集映射 -->
+	<resultMap id="goodResultMap" type="com.jbit.games.entity.Good">
+		<id property="goods_id"  />
+		<result property="goods_name" />
+		<result property="goods_price"  />
+		<result property="goods_info"  />
+		<result property="goods_store"  />
+		<result property="goods_evaluate"  />
+		<result property="goods_score"  />
+		<result property="goods_image"  />
+		<result property="goods_state"  />
+		<result property="goods_class"  />
+	</resultMap>
+	
+	<!-- 添加操作 -->
+	<insert id="add" parameterType="com.jbit.games.entity.Good">
+		insert into game_goods(goods_name,goods_price,goods_info,goods_store,goods_evaluate,goods_score,goods_image,goods_state,goods_class)
+		values(#{goods_name},#{goods_price},#{goods_info},#{goods_store},#{goods_evaluate},#{goods_score},#{goods_image},#{goods_state},#{goods_class});
+	</insert>
+	
+	<!-- 删除操作 -->
+	<delete id="delete"  parameterType="int">
+		delete from game_goods where goods_id=#{id}
+	</delete>
+	
+	<!-- 更新操作 -->
+	<update id="update" parameterType="com.jbit.games.entity.Good">
+		update game_goods set 
+			goods_name=#{goods_name},
+			goods_price=#{goods_price},
+			goods_info=#{goods_info},
+			goods_store=#{goods_store},
+			goods_evaluate=#{goods_evaluate},
+			goods_score=#{goods_score},
+			goods_image=#{goods_image},
+			goods_state=#{goods_state},
+			goods_class=#{goods_class}
+		where goods_id=#{goods_id}
+	</update>
+	
+	<!-- 通过主键得到一个数据 -->
+	<select id="getGoodById" resultMap="goodResultMap" parameterType="int">
+		select * from game_goods where goods_id=#{id}
+	</select>	
+	
+	<!-- 一定条件下的分页查询 -->
+	<select id="getGoodsByCondtion" parameterType="hashmap" resultMap="goodResultMap">
+	
+		select * from game_goods where 1=1
+				
+	        		<if test ="goods_name != null">
+	          			and goods_name like #{goods_name}
+	        		</if>
+	        		<if test ="goods_class != null">
+	          			and goods_class =#{goods_class}
+	        		</if>
+	      		
+		and goods_id limit #{startRow},#{endRow}
+	
+  </select>
+		
+  <!-- 通过条件得到总数 -->
+  <select id="getTotal" parameterType="hashmap" resultType="int">
+  	select count(*) from game_goods
+  	<where>
+    		<if test ="goods_name != null">
+      			and goods_name like '%${goods_name}%'
+    		</if>
+    		<if test ="goods_class != null">
+      			and goods_class =#{goods_class}
+    		</if>
+      </where>
+  </select>
+	
+	
+ </mapper>

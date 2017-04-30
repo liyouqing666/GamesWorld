@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jbit.games.dao.ShoppDao">
+
+	<!-- 结果集映射 -->
+	<resultMap id="shoppResultMap" type="com.jbit.games.entity.Shopp">
+		<id property="shopp_id"  />
+		<result property="goods_id" />
+		<result property="shopp_num"  />
+		<result property="shopp_price"  />
+		<result property="shopp_total"  />
+		<result property="shopp_image"  />
+		<result property="userId" column="userid"  />
+	</resultMap>
+	
+	<!-- 添加操作 -->
+	<insert id="add" parameterType="com.jbit.games.entity.Shopp">
+		insert into game_shopping 
+		(goods_id,shopp_num,shopp_price,shopp_total,shopp_image,userid)
+		values
+		(#{goods_id},#{shopp_num},#{shopp_price},#{shopp_total},#{shopp_image},#{userId});
+	</insert>
+	
+	<!-- 删除操作 -->
+	<delete id="delete" parameterType="int">
+		delete from game_shopping where shopp_id=#{id}
+	</delete>
+	
+	<!-- 更新操作 -->
+	<update id="update" parameterType="com.jbit.games.entity.Shopp">
+		update game_shopping set
+			goods_id=#{goods_id},
+			shopp_num=#{shopp_num},
+			shopp_price=#{shopp_price},
+			shopp_total=#{shopp_total},
+			shopp_image=#{shopp_image}
+			userid=#{userId}
+		where shopp_id=#{shopp_id}
+	</update>
+	
+	<!-- 通过主键得到一个数据 -->
+	<select id="getShoppById" parameterType="int" resultMap="shoppResultMap">
+		select * from game_shopping where shopp_id=#{id}
+	</select>
+	
+	<!-- 通过userId得到所有的数据 -->
+	<select id="getAll" parameterType="int" resultMap="shoppResultMap">
+		select * from game_shopping where userid=#{userId}
+	</select>
+  
+ </mapper>

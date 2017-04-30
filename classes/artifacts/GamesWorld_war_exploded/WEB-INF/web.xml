@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+  <display-name></display-name>	
+  <welcome-file-list>
+    <welcome-file>login.jsp</welcome-file>
+  </welcome-file-list>
+ <!-- 字符编码集设置 -->
+  <filter>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+    	<param-name>encoding</param-name>
+    	<param-value>UTF-8</param-value>
+    </init-param>
+  </filter> 
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!-- spring配置 -->
+  <context-param>
+  	<param-name>contextConfigLocation</param-name>
+  	<param-value>classpath:applicationContext.xml</param-value>
+  </context-param>
+  <listener>
+  	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>  
+  <!-- springMVC配置  拦截所有以.htm结尾的请求-->
+  <servlet>
+  	<servlet-name>springmvc</servlet-name>
+  	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+  	<init-param>
+  		<param-name>contextConfigLocation</param-name>
+  		<param-value>classpath:springmvc-servlet.xml</param-value>
+  	</init-param>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>springmvc</servlet-name>
+	<url-pattern>*.htm</url-pattern>  	
+  </servlet-mapping>
+  <!-- 导出订单的servlet -->
+  <servlet>
+  	<servlet-name>ExportExlServlet</servlet-name>
+  	<servlet-class>com.jbit.games.web.servlet.ExportExlServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  		<servlet-name>ExportExlServlet</servlet-name>
+  		<url-pattern>/ExportExlServlet</url-pattern>
+  </servlet-mapping>
+  <!-- 验证码验证的servlet -->
+  <servlet>
+  	<servlet-name>VerificationServlet</servlet-name>
+  	<servlet-class>com.jbit.games.web.servlet.VerificationServlet</servlet-class>
+  </servlet> 
+  <servlet-mapping>
+  	<servlet-name>VerificationServlet</servlet-name>
+  	<url-pattern>/VerificationServlet</url-pattern>
+  </servlet-mapping>  
+</web-app>

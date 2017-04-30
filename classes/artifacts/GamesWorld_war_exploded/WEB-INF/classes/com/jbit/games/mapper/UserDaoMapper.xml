@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jbit.games.dao.UserDao">
+	<resultMap id="userResultMap" type="com.jbit.games.entity.User">
+		<id property="user_id" />
+		<result property="username" />
+		<result property="password"  />
+		<result property="nickname" />
+		<result property="email" />
+		<result property="qq" />
+		<result property="address" />
+		<result property="tel" />
+		<result property="role" />
+	</resultMap>
+	
+	<select id="hasUser" parameterType="hashmap" resultMap="userResultMap">
+		select * from game_user where username=#{username}
+	</select>
+	<select id="getUserByUsername" parameterType="hashmap" resultMap="userResultMap">
+		select * from game_user where username=#{username} 
+	</select>
+	
+	<insert id="add" useGeneratedKeys="true" parameterType="com.jbit.games.entity.User" keyProperty="user_id" >
+		insert into game_user 
+		(username,password,nickname,email,qq,address,tel,role)
+		values(#{username},#{password},#{nickname},#{email},#{qq},#{address},#{tel},#{role});
+	</insert>
+	
+	<select id="getAll" resultMap="userResultMap"	parameterType="hashmap">
+			select * from game_user  LIMIT #{firstResult},#{maxResult}
+	</select>
+	
+	<select id="getCount" resultType="int">
+		select  COUNT(*) from game_user
+	</select>
+	
+	
+ </mapper>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jbit.games.dao.Order2Dao">
+
+	<!-- order2结果集映射 -->
+	<resultMap id="Order2ResultMap" type="com.jbit.games.entity.Order2">
+		<id property="order2_id"  />
+		<result property="order_id" />
+		<result property="num"  />
+		<result property="price"  />
+		<result property="total"  />
+		<result property="image"  />
+	</resultMap>
+	<!-- 添加操作  -->
+	<insert id="add" parameterType="com.jbit.games.entity.Order2">
+		insert into game_order2 
+		(order_id,num,price,total,image)
+		values
+		(#{order_id},#{num},#{price},#{total},#{image});
+	</insert>
+	
+	<!-- order删除操作 -->
+	<delete id="delete" parameterType="int">
+		delete from game_order2 where order_id=#{id}
+	</delete>
+		
+	<!-- 得到所有数据-->
+	<select id="getAll2" resultMap="Order2ResultMap">
+		select * from game_order2
+	</select>
+	
+ </mapper>
