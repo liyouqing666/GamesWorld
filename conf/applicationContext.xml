@@ -18,10 +18,21 @@
 	    <!-- <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 	        <property name="location" value=""/>
 	    </bean> -->
-    	
-	<!-- 加载db.properties文件中的内容，log4j.properties文件中key命名要有一定的特殊规则 -->
-		<context:property-placeholder location="classpath:log4j.properties" />	
-		<!-- value="${log4j.rootLogger}" -->
+	<!-- 将多个配置文件读取到容器中，交给Spring管理 -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<!-- 这里支持多种寻址方式：classpath和file -->
+				<value>classpath:log4j.properties</value>
+				<value>classpath:jdbc.properties</value>
+				<!-- 推荐使用file的方式引入，这样可以将配置和代码分离 -->
+	            <!-- <value>file:/opt/demo/config/demo-remote.properties</value>-->
+			</list>
+		</property>
+	</bean>
+<!-- 加载db.properties文件中的内容，log4j.properties文件中key命名要有一定的特殊规则 -->
+	<!--<context:property-placeholder location="classpath:log4j.properties" />	-->
+    <!-- value="${log4j.rootLogger}" -->
 			
 	<!-- 
 		bean的作用域通过scope来配置	
@@ -30,10 +41,10 @@
 			
 	<!-- dbcp数据源配置 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
-		<property name="url" value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=utf8"></property>
-		<property name="username" value="root"></property>
-		<property name="password" value="orcl"></property>
+		<property name="driverClassName" value="${driverClassName}"></property>
+		<property name="url" value="${url}"></property>
+		<property name="username" value="${username}"></property>
+		<property name="password" value="${password}"></property>
 	</bean>	
 		
 	<!-- 事务管理器 -->	
