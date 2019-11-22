@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jbit.games.dao.OrderDao">
+
+	<!-- order结果集映射 -->
+	<resultMap id="OrderResultMap" type="com.jbit.games.entity.Order">
+		<id property="order_id"  />
+		<result property="order_num" />
+		<result property="order_state"  />
+		<result property="order_time"  />
+		<result property="order_total"  />
+		<result property="username"  />
+		<result property="tel"/>
+		<result property="address"  />
+		<result property="user_id"  />
+	</resultMap>
+	
+	
+	<!-- 添加操作 并获得新添加的id -->
+	<insert id="add" useGeneratedKeys="true" parameterType="com.jbit.games.entity.Order" keyProperty="order_id">
+		insert into game_order(order_num,order_state,order_time,order_total,username,tel,address,user_id)
+		 values(#{order_num},#{order_state},#{order_time},#{order_total},#{username},#{tel},#{address},#{user_id});
+	</insert>
+	
+	<!-- order删除操作 -->
+	<delete id="delete" parameterType="int">
+		delete from game_order where order_id=#{id}
+	</delete>	
+	
+	<!-- 更新操作 -->
+	<update id="update" parameterType="com.jbit.games.entity.Order">
+		update game_order set
+			order_state=#{order_state},
+			username=#{username},
+			tel=#{tel},
+			address=#{address}
+		where order_id=#{order_id}	
+	</update>
+				
+	<!-- 一定条件下的分页查询 -->
+	<select id="getAllByCondtion" parameterType="hashmap" resultMap="OrderResultMap">
+		select * from game_order  where 1=1
+			
+        		<if test =" username!= null">
+          			and username like #{username}
+        		</if>
+        		<if test ="order_id != null">
+          			and order_id =#{order_id}
+        		</if>
+        		<if test="user_id!=null">
+        			and user_id=#{user_id}
+        		</if>
+      		
+		and order_id limit #{startRow},#{endRow}
+  </select>
+	
+<select id="getById" parameterType="int" resultMap="OrderResultMap">
+	select * from game_order where order_id=#{order_id}
+</select>	
+		
+  <!-- 通过条件得到总数 -->
+  <select id="getTotal" parameterType="hashmap" resultType="int">
+	  	select count(*) from game_order
+	  	<where>
+    		<if test =" username!= null">
+          			and username like '%${username}%'
+       		</if>
+       		<if test ="order_id != null">
+         			and order_id =#{order_id}
+       		</if>
+       		<if test="user_id!=null">
+        			and user_id=#{user_id}
+        	</if>
+      	</where>
+  </select>
+	
+	<!-- 通过userid得到所有的订单 -->
+	
+	<select id="getAllByUserId" parameterType="int" resultMap="OrderResultMap">
+		select * from game_order where user_id=#{userId}
+	</select>
+	
+ </mapper>

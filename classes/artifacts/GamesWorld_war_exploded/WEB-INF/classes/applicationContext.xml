@@ -14,14 +14,21 @@
 			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
 			">
 		
-	<!-- 去加载资源配置文件的内容 -->
-	    <!-- <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-	        <property name="location" value=""/>
-	    </bean> -->
-    	
-	<!-- 加载db.properties文件中的内容，log4j.properties文件中key命名要有一定的特殊规则 -->
-		<context:property-placeholder location="classpath:log4j.properties" />	
-		<!-- value="${log4j.rootLogger}" -->
+
+	<!-- 将多个配置文件读取到容器中，交给Spring管理 -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<!-- 这里支持多种寻址方式：classpath和file -->
+				<value>classpath:log4j.properties</value>
+				<value>classpath:jdbc.properties</value>
+				<!-- 推荐使用file的方式引入，这样可以将配置和代码分离 -->
+	            <!-- <value>file:/opt/demo/config/demo-remote.properties</value>-->
+			</list>
+		</property>
+	</bean>
+<!-- 加载db.properties文件中的内容，log4j.properties文件中key命名要有一定的特殊规则 -->
+	<!--<context:property-placeholder location="classpath:log4j.properties" />	-->
 			
 	<!-- 
 		bean的作用域通过scope来配置	
@@ -31,9 +38,9 @@
 	<!-- dbcp数据源配置 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
-		<property name="url" value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=utf8"></property>
-		<property name="username" value="root"></property>
-		<property name="password" value="orcl"></property>
+		<property name="url" value="${url}"></property>
+		<property name="username" value="${username}"></property>
+		<property name="password" value="${password}"></property>
 	</bean>	
 		
 	<!-- 事务管理器 -->	
@@ -61,22 +68,23 @@
 	<!-- 加载事务管理注解驱动 -->
 	<tx:annotation-driven transaction-manager="transactionManager" ></tx:annotation-driven>
 	
-	<!-- 扫描注解  -->	
+	<!-- 扫描注解  -->
 	<context:component-scan base-package="com.jbit.games">
 		<context:exclude-filter type="annotation" 
 			expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
+
 	<!-- 让我的实现了applicationaware的类生效
 	-->
 	<bean id="springApplicationContextUtils" class="com.jbit.games.web.servlet.SpringApplicationContextUtils"/>
-	<!-- 根据映射文件生成dao的实现类  为了让PropertyPlaceholderConfigurer和这个不冲突
-		可以用<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+
+	<!-- 根据映射文件生成dao的实现类 
 	-->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
-		<!-- <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property> -->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
 		<property name="basePackage" value="com.jbit.games.dao"></property>
 	</bean>
+
 	<!-- <aop:config>
 		          如果有多个包就这样搞
 			<aop:pointcut id="pc" expression="execution(* com.app.service.*.*(..) or com.app.service.*.*(..))" />

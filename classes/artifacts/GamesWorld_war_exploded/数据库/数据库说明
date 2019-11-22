@@ -1,0 +1,7 @@
+数据库是mysql数据库
+
+数据库名字是test
+用户名是root
+密码是orcl
+
+上面的test.sql就是数据库sql脚本文件

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jbit.games.dao.StuDao">
+	<resultMap id="stuInfoResultMap" type="com.jbit.games.entity.Student">
+		<id property="no" column="stu_no" />
+		<result property="name" column="stu_name" />
+		<result property="gender" column="stu_gender" />
+		<result property="age" column="stu_age" />
+	</resultMap>
+	
+	<select id="getAll" resultMap="stuInfoResultMap">
+		select * from stu_info
+	</select>
+	
+	<insert id="add" parameterType="com.jbit.games.entity.Student">
+		insert into stu_info(stu_name,stu_gender,stu_age) values(#{name},#{gender},#{age});
+	</insert>
+	<!-- 测试map在mybatis文件中的使用方法 -->
+	<select id="getMap" resultType="java.util.HashMap">
+		select * from stu_info
+	</select>
+ </mapper>
